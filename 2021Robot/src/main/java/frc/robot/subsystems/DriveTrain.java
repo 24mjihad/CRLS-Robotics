@@ -32,7 +32,6 @@ public class DriveTrain extends Subsystem {
 
   public static DifferentialDrive m_drive = new DifferentialDrive(ML, MR);
 
-  //private PIDController pid = new PIDController(0.8, 0.2, 0.1);
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
