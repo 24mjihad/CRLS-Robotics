@@ -12,8 +12,7 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.*;
-import frc.robot.RobotMap;
+import frc.robot.subsystems.PID_Drive;
 
 /**
  * The VM is configured to automatically run this class, and to call the
