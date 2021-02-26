@@ -11,8 +11,13 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.PID_Drive;
+import frc.robot.RobotContainer;
+import frc.robot.Commands.Driverpid;
+import frc.robot.Commands.Next_Ball;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,17 +31,19 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  public Gyro gyro;
-  public PID_Drive pid = new PID_Drive(1, 1, 1, gyro);
+  private RobotContainer container;
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
   @Override
   public void robotInit() {
+
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
+    //SmartDashboard.putData("Auto choices", m_chooser);
+    
   }
 
   /**
@@ -65,9 +72,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
+    /*m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+    System.out.println("Auto selected: " + m_autoSelected);*/
   }
 
   /**
@@ -75,7 +82,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
+    /*switch (m_autoSelected) {
       case kCustomAuto:
         // Put custom auto code here
         break;
@@ -83,14 +90,20 @@ public class Robot extends TimedRobot {
       default:
         // Put default auto code here
         break;
-    }
+    }*/
   }
 
   /**
    * This function is called once when teleop is enabled.
    */
+  //Driverpid d;
   @Override
   public void teleopInit() {
+    RobotContainer.exampleButton.whenPressed(new Next_Ball(RobotContainer.index));
+    // schedule the autonomous command (example)
+    if (RobotContainer.getAutonomousCommand() != null) {
+      RobotContainer.getAutonomousCommand().schedule();
+    }
   }
 
   /**
@@ -98,8 +111,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    
-    pid.executeTurn(20, 90);
+
+
+    RobotContainer.getAutonomousCommand().schedule();
   }
 
   /**

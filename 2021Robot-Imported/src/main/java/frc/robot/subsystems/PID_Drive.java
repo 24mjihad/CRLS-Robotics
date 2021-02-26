@@ -30,7 +30,7 @@ public class PID_Drive extends PIDSubsystem {
     Gyro gyro;
     double derivative;
     double error;
-    DifferentialDrive robotDrive;
+    //DifferentialDrive robotDrive;
     double rcw;
 
 
@@ -63,7 +63,7 @@ public class PID_Drive extends PIDSubsystem {
     {
       setSetpoint(angle);
       PID();
-      DriveTrain.arcadeDrive(speed, constrain(rcw*Math.PI/180));
+      //DriveTrain.arcadeDrive(speed, constrain(rcw*Math.PI/180));
     }
   @Override
   public void initDefaultCommand() {

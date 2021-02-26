@@ -41,7 +41,7 @@ public class DriveTrain extends Subsystem {
     //setDefaultCommand();
 
   }
-  public static void arcadeDrive(double speed, double rotation){
-    m_drive.arcadeDrive(speed, rotation);
+  public static void tankDrive(double lspeed, double rspeed){
+    m_drive.tankDrive(lspeed, rspeed);
   }
 }
