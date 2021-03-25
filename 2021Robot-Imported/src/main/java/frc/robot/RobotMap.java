@@ -17,17 +17,15 @@ public class RobotMap {
     public static final int BR = 1;
     public static final int BL = 3;
 
-    public static final int TS = 5;
-    public static final int BS = 6;
+    public static final int TopShooter = 7;
+    public static final int BottomShooter = 8;
 
-    public static final int Dc = 7;
-    public static final int Rc = 8;
+    public static final int DepClimb = 5;
+    public static final int RetClimb = 6;
 
-    public static final int Gatherer = 9;
-    public static final int Indexer = 10;
-    public static final int test = 100;
-
-    public static final int indexButton = 1;
+    public static final int Gatherer = 10;
+    public static final int Indexer = 9;
+ //   public static final int test = 100;
 
     public static final int pingChannel1 = 1;
     public static final int pingChannel2 = 2;
@@ -43,15 +41,16 @@ public class RobotMap {
     public static final int Zval = 2;
     public static final int slider = 3;
 
-    public static final int triggerP = 1; //Shooter
-    public static final int button2P = 2; //Change Direction
-    public static final int button3P = 3; //Indexer
-    public static final int button4P = 4; //Gatherer
-    public static final int button5P = 5; //Wind Cord
-    public static final int button6P = 6; //Unwide Cord
-    public static final int button7P = 7; //Down Parascope
-    public static final int button8P = 8; //Lift Parascope
-    public static final int button9P = 9; //Drive to 3m (optimal shooting distance)
-    public static final int button10P = 10;
+    public static final int b_Shooter = 1; //Shooter
+    public static final int b_Direction = 2; //Change Direction
+    public static final int b_Index = 3; //Indexer
+    public static final int b_Gather = 4; //Gatherer
+    public static final int b_WindUp = 5; //Wind Cord
+    public static final int b_WindDown = 6; //Unwide Cord
+    public static final int b_ClimbUp = 7; //Down Parascope
+    public static final int b_ClimbDown = 8; //Lift Parascope
+    public static final int b_9P = 9; //Drive to 3m (optimal shooting distance)
+    public static final int b_10P = 10;
 
+    public static final int bc_Auto1 = 1;
 }

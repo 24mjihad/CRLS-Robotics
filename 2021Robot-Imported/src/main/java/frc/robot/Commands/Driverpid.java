@@ -5,7 +5,7 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.DriveTrain;
@@ -13,15 +13,16 @@ import frc.robot.subsystems.PID_Drive;
 
 public class Driverpid extends CommandBase {
   /** Creates a new Driver. */
-  Joystick joy;
+  Joystick joy1;
   Joystick joy2;
   PID_Drive pid;
-  DriveTrain drive;
+  private final DriveTrain m_drivetrain;
   public Driverpid(Joystick jst, Joystick jst2, DriveTrain drive) {
     // Use addRequirements() here to declare subsystem dependencies.
-    joy = jst;
+    joy1 = jst;
     joy2 = jst2;
-    this.drive = drive;
+    m_drivetrain = drive;
+    addRequirements(m_drivetrain);
   }
 
   // Called when the command is initially scheduled.
@@ -31,7 +32,7 @@ public class Driverpid extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    DriveTrain.tankDrive(joy.getRawAxis(RobotMap.Yval), joy2.getRawAxis(RobotMap.Yval));
+    m_drivetrain.tankDrive(joy1.getRawAxis(RobotMap.Yval), joy2.getRawAxis(RobotMap.Yval));
   }
   // Called once the command ends or is interrupted.
   @Override

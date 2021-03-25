@@ -4,40 +4,42 @@
 
 package frc.robot.Commands;
 
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.DriveTrain;
 
-public class Next_Ball extends CommandBase{
-  /** Creates a new Next_Ball. */
-  private static double time = 0;
-  private final Indexer m_index;
-  public Next_Ball(Indexer indexer) {
+public class DriveCircle extends CommandBase {
+  /** Creates a new DriveCircle. */
+  private Gyro m_gyro;
+  private double initAngle;
+  private DriveTrain m_drive;
+  public DriveCircle(DriveTrain drive, Gyro gyro) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_index = indexer;
-    addRequirements(m_index);
+    m_drive = drive;
+    m_gyro = gyro;
+    addRequirements(m_drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    time = Timer.getFPGATimestamp();
-    m_index.turnForward();
+    initAngle = m_gyro.getAngle();
+    m_drive.tankDrive(.2, .5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_drive.tankDrive(.2, .5);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_index.stop();
-  }
+  public void end(boolean interrupted) {}
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return time - Timer.getFPGATimestamp() < -2.4;
+    return Math.abs(m_gyro.getAngle() - initAngle) > 340;
   }
 }

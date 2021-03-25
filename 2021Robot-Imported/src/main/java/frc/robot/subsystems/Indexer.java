@@ -17,11 +17,11 @@ public class Indexer extends SubsystemBase {
   }
 
   public void turnForward(){
-    indexer.set(1);
+    indexer.set(.45);
   }
 
   public void turnBack(){
-    indexer.set(-1);
+    indexer.set(-.45);
   }
   
   public void stop(){

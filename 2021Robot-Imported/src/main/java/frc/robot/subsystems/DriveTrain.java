@@ -7,6 +7,8 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
+
 //import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import com.revrobotics.CANSparkMax;
@@ -17,31 +19,49 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 /**
  * Add your docs here.
  */
-public class DriveTrain extends Subsystem {
+public class DriveTrain extends SubsystemBase {
   
-  public static CANSparkMax FL = new CANSparkMax(RobotMap.FL,MotorType.kBrushless);
-  public static CANSparkMax BL = new CANSparkMax(RobotMap.BL,MotorType.kBrushless);
-  public static CANSparkMax FR = new CANSparkMax(RobotMap.FR,MotorType.kBrushless);
-  public static CANSparkMax BR = new CANSparkMax(RobotMap.BR,MotorType.kBrushless);
+  private final static CANSparkMax FL = new CANSparkMax(RobotMap.FL,MotorType.kBrushless);
+  private final static CANSparkMax BL = new CANSparkMax(RobotMap.BL,MotorType.kBrushless);
+  private final static CANSparkMax FR = new CANSparkMax(RobotMap.FR,MotorType.kBrushless);
+  private final static CANSparkMax BR = new CANSparkMax(RobotMap.BR,MotorType.kBrushless);
+  private final CANEncoder En_R = FR.getEncoder();
+  private final CANEncoder En_L = FL.getEncoder();
+
+  private final double pcf = 1.7525; // 6 in * 3.14 * 10.75 gear ratio
 
   static SpeedControllerGroup MR = new SpeedControllerGroup(BR, FR);
   static SpeedControllerGroup ML = new SpeedControllerGroup(BL, FL);
 
-  public static DifferentialDrive m_drive = new DifferentialDrive(ML, MR);
+  private final static DifferentialDrive m_drive = new DifferentialDrive(ML, MR);
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  @Override
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    //setDefaultCommand();
-
+  public DriveTrain(){
+    En_R.setPositionConversionFactor(pcf);
+    En_L.setPositionConversionFactor(pcf);
   }
-  public static void tankDrive(double lspeed, double rspeed){
+  
+  public void resetEncoders(){
+    En_R.setPosition(0);
+    En_L.setPosition(0);
+  }
+
+  public double avgPosition(){
+    return (En_L.getPosition() + En_R.getPosition())/2.0;
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+  }
+  
+  public void tankDrive(double lspeed, double rspeed){
     m_drive.tankDrive(lspeed, rspeed);
   }
 }

@@ -21,6 +21,13 @@ public class Gatherer extends SubsystemBase {
 
   }
 
+  public void start(){
+    gatherer.set(-1);
+  }
+  public void stop(){
+    gatherer.set(0);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

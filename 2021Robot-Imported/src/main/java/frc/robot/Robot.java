@@ -9,8 +9,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.DriveTrain;
@@ -31,8 +33,8 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private RobotContainer container;
-
+  public static RobotContainer container;
+  public Command m_autonomousCommand;
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -40,9 +42,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
+    container = new RobotContainer();
+    LiveWindow.disableAllTelemetry();
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
-    //SmartDashboard.putData("Auto choices", m_chooser);
+    SmartDashboard.putData("Auto choices", m_chooser);
     
   }
 
@@ -54,6 +58,7 @@ public class Robot extends TimedRobot {
    * <p>This runs after the mode specific periodic functions, but before
    * LiveWindow and SmartDashboard integrated updating.
    */
+  
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
@@ -72,9 +77,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    /*m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
+    /*
+    m_autoSelected = m_chooser.getSelected();
+    m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);*/
+    m_autonomousCommand = container.getAutonomousCommand();
+    if (m_autonomousCommand != null) {
+      CommandScheduler.getInstance().schedule(m_autonomousCommand);
+    }
   }
 
   /**
@@ -82,7 +92,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    /*switch (m_autoSelected) {
+    //if (container.getAutonomousCommand() != null) {
+    //  CommandScheduler.getInstance().schedule(container.getAutonomousCommand());
+    //}
+    /*
+    switch (m_autoSelected) {
       case kCustomAuto:
         // Put custom auto code here
         break;
@@ -99,11 +113,16 @@ public class Robot extends TimedRobot {
   //Driverpid d;
   @Override
   public void teleopInit() {
-    RobotContainer.exampleButton.whenPressed(new Next_Ball(RobotContainer.index));
+    //RobotContainer.exampleButton.whenPressed(new Next_Ball(RobotContainer.index));
     // schedule the autonomous command (example)
-    if (RobotContainer.getAutonomousCommand() != null) {
-      RobotContainer.getAutonomousCommand().schedule();
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
     }
+    /*
+    if (container.getTeleopCommand() != null) {
+      CommandScheduler.getInstance().schedule(container.getTeleopCommand());
+    }
+    */
   }
 
   /**
@@ -111,9 +130,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    //if (container.getTeleopCommand() != null) {
+    //  CommandScheduler.getInstance().schedule(container.getTeleopCommand());
+    //}
 
-
-    RobotContainer.getAutonomousCommand().schedule();
   }
 
   /**

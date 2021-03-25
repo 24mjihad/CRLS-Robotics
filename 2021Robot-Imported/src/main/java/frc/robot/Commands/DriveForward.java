@@ -4,40 +4,47 @@
 
 package frc.robot.Commands;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.DriveTrain;
 
-public class Next_Ball extends CommandBase{
-  /** Creates a new Next_Ball. */
-  private static double time = 0;
-  private final Indexer m_index;
-  public Next_Ball(Indexer indexer) {
+public class DriveForward extends CommandBase {
+  /** Creates a new DriveForward. */
+  private DriveTrain m_drive;
+  private double  m_duration;
+  private double time;
+  //private Encoder m_encoder;
+  public DriveForward(DriveTrain drive, double distance) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_index = indexer;
-    addRequirements(m_index);
+    m_drive = drive;
+    m_duration = distance;
+    //m_encoder = encoder;
+    addRequirements(m_drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     time = Timer.getFPGATimestamp();
-    m_index.turnForward();
+    m_drive.tankDrive(1, 1);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_drive.tankDrive(1, 1);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_index.stop();
+    m_drive.tankDrive(0, 0);
   }
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return time - Timer.getFPGATimestamp() < -2.4;
+    return Timer.getFPGATimestamp() - time > m_duration;
   }
 }
