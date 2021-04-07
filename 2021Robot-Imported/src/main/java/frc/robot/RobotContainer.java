@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.SPI;
 
 import frc.robot.Commands.*;
 import frc.robot.subsystems.*;
@@ -29,6 +28,7 @@ public class RobotContainer {
 
 
     public Gyro gyro = new ADXRS450_Gyro();
+
     //subsystems 
 
     private final DriveTrain s_drivetrain   = new DriveTrain();
@@ -49,15 +49,15 @@ public class RobotContainer {
     //private final Shoot        c_shoot  = new Shoot(s_shooter);
     //private final Stop_shoot   c_sshoot = new Stop_shoot(s_shooter);
     private final Deploy_Shoot c_dshoot = new Deploy_Shoot(s_index, s_shooter);
-    private final DriveCircle  c_dcirc  = new DriveCircle(s_drivetrain, gyro);
-    private final Auto_Race_Barrel c_Auto_Race_Barrel = new Auto_Race_Barrel(s_drivetrain, 2, gyro);
+    private final DriveCircle  c_dcirc  = new DriveCircle(s_drivetrain, gyro, true, 360);
+    private final Auto_Race_Barrel c_Auto_Race_Barrel = new Auto_Race_Barrel(s_drivetrain, gyro);
 
     private final Command m_simpleAuto =
       new FunctionalCommand(
           s_drivetrain::resetEncoders,
-          () -> s_drivetrain.tankDrive(1,1), 
-          interrupt -> s_drivetrain.tankDrive(1, 1),
-          () -> s_drivetrain.avgPosition() >= 12,
+          () -> s_drivetrain.tankDrive(.5,.5), 
+          interrupt -> s_drivetrain.tankDrive(0, 0),
+          () -> Math.abs(s_drivetrain.avgPosition()) >= 12,
           s_drivetrain
       );
     //define buttons on joystick
@@ -68,19 +68,34 @@ public class RobotContainer {
         reverseButton   = new JoystickButton(joystick1, RobotMap.b_Direction),
         climbupButton   = new JoystickButton(joystick1, RobotMap.b_ClimbUp),
         climbdownButton = new JoystickButton(joystick1, RobotMap.b_ClimbDown),
-        WindupButton    = new JoystickButton(joystick1, RobotMap.b_WindUp),
-        WinddownButton  = new JoystickButton(joystick1, RobotMap.b_WindDown),
-        Auto1Button     = new JoystickButton(joystick2, RobotMap.bc_Auto1) 
+        WindupButton    = new JoystickButton(joystick1, RobotMap.b_SpeedUp),
+        WindownButton   = new JoystickButton(joystick1, RobotMap.b_SpeedDown),
+        AutoR1Button    = new JoystickButton(joystick2, RobotMap.bc_Auto_Race1),
+        AutoR2Button    = new JoystickButton(joystick2, RobotMap.bc_Auto_Race2),
+        AutoR3Button    = new JoystickButton(joystick2, RobotMap.bc_Auto_Race3),
+        AutoS1Button    = new JoystickButton(joystick2, RobotMap.bc_Auto_Search1),
+        AutoS2Button    = new JoystickButton(joystick2, RobotMap.bc_Auto_Search2),     
+        EncoderButton   = new JoystickButton(joystick1, RobotMap.b_9P),
+        SortButton      = new JoystickButton(joystick1, RobotMap.b_10P)
         ;
 
     //Add trigger conditionals
     private void configureButtonBindings() {
-        indexButton  .whenPressed(  new Next_Ball(s_index));
-        shootButton  .whenHeld(     new Deploy_Shoot(s_index, s_shooter))
-                     .whenReleased( new InstantCommand(s_shooter::m_stop, s_shooter));
-        gatherButton .toggleWhenPressed(
-                                    new StartEndCommand(s_gather::start, s_gather::stop, s_gather));
-        Auto1Button  .whenPressed(  new Auto_Race_Barrel(s_drivetrain, 1, gyro));
+        indexButton  .whenPressed(      new Next_Ball(s_index));
+        shootButton  .whenHeld(         new Deploy_Shoot(s_index, s_shooter))
+                     .whenReleased(     new InstantCommand(s_shooter::m_stop, s_shooter));
+        gatherButton .toggleWhenPressed(new StartEndCommand(s_gather::start, s_gather::stop, s_gather));
+        AutoR1Button .whenPressed(      new Auto_Race_Barrel(s_drivetrain, gyro));
+        AutoR2Button .whenPressed(      new Auto_Race_Slalom(s_drivetrain, gyro));
+        AutoR3Button .whenPressed(      new Auto_Race_Bounce(s_drivetrain, gyro));
+        AutoS1Button .whenPressed(      new Auto_Search_A(s_drivetrain, gyro,s_gather));
+        AutoS2Button .whenPressed(      new Auto_Search_B(s_drivetrain, gyro,s_gather));
+        reverseButton.whenPressed(      new InstantCommand(s_drivetrain::toggleDriveMode, s_drivetrain));
+        EncoderButton.whenPressed(      new InstantCommand(s_drivetrain::resetEncoders, s_drivetrain));
+        SortButton   .whenPressed(      new InstantCommand(s_index::toggleSort, s_index));
+        WindupButton .whenPressed(      new InstantCommand(s_shooter::m_distup, s_shooter));
+        WindownButton.whenPressed(      new InstantCommand(s_shooter::m_distdown, s_shooter));
+
     }
 
     //Constructor
@@ -89,7 +104,11 @@ public class RobotContainer {
         
         s_drivetrain.setDefaultCommand(
             new RunCommand(
-                () -> s_drivetrain.tankDrive(joystick1.getRawAxis(RobotMap.Yval), joystick2.getRawAxis(RobotMap.Yval)),
+                () -> s_drivetrain.Drive(
+                    -1 * joystick1.getRawAxis(RobotMap.Yval),
+                    -1 * joystick2.getRawAxis(RobotMap.Yval),
+                    joystick1.getRawAxis(RobotMap.Xval)
+                    ),
                 s_drivetrain)
         );
 
@@ -102,7 +121,7 @@ public class RobotContainer {
         return c_drive;
     }
     public Command getAutonomousCommand() {
-        return m_simpleAuto;
+        return c_Auto_Race_Barrel;
     }
     
 }

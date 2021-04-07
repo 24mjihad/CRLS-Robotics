@@ -33,6 +33,7 @@ public class RobotMap {
     public static final int echoChannel1 = 3;
     public static final int echoChannel2 = 4;
 
+    public static final int pwmsort = 0;
 
     //Joystick mappings
 
@@ -45,12 +46,17 @@ public class RobotMap {
     public static final int b_Direction = 2; //Change Direction
     public static final int b_Index = 3; //Indexer
     public static final int b_Gather = 4; //Gatherer
-    public static final int b_WindUp = 5; //Wind Cord
-    public static final int b_WindDown = 6; //Unwide Cord
+    public static final int b_SpeedUp = 5; //Wind Cord
+    public static final int b_SpeedDown = 6; //Unwide Cord
     public static final int b_ClimbUp = 7; //Down Parascope
     public static final int b_ClimbDown = 8; //Lift Parascope
     public static final int b_9P = 9; //Drive to 3m (optimal shooting distance)
     public static final int b_10P = 10;
 
     public static final int bc_Auto1 = 1;
+    public static final int bc_Auto_Race1 = 6;
+    public static final int bc_Auto_Race2 = 7;
+    public static final int bc_Auto_Race3 = 8;
+    public static final int bc_Auto_Search1 = 9;
+    public static final int bc_Auto_Search2 = 10;
 }

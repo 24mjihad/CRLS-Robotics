@@ -11,19 +11,22 @@ import frc.robot.subsystems.DriveTrain;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Auto_Race_Barrel extends SequentialCommandGroup {
-  /** Creates a new Auto_Race_1. */
-  public Auto_Race_Barrel(DriveTrain drive, Gyro gyro) {
+public class Auto_Race_Slalom extends SequentialCommandGroup {
+  /** Creates a new Auto_Race_Slalom. */
+  public Auto_Race_Slalom(DriveTrain drive, Gyro gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new DriveForward(drive, 12),
-      new DriveCircle(drive, gyro, true, 357),
-      new DriveForward(drive, 12),
-      new DriveCircle(drive, gyro, false, 300),
-      new DriveForward(drive, 28),
-      new DriveCircle(drive, gyro, true, 128),
-      new DriveForward(drive, 96)
+      new DriveCircle(drive, gyro, true, 45),
+      new DriveForward(drive, 24),
+      new DriveCircle(drive, gyro, false, 45),
+      new DriveForward(drive, 96),
+      new DriveCircle(drive, gyro, false, 90),
+      new DriveCircle(drive, gyro, true, 360),
+      new DriveCircle(drive, gyro, false, 90),
+      new DriveForward(drive, 96),
+      new DriveCircle(drive, gyro, false, 45),
+      new DriveForward(drive, 36)
     );
   }
 }

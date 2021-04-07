@@ -13,10 +13,24 @@ public class DriveCircle extends CommandBase {
   private Gyro m_gyro;
   private double initAngle;
   private DriveTrain m_drive;
-  public DriveCircle(DriveTrain drive, Gyro gyro) {
+  private double rightspd;
+  private double leftspd;
+  private int m_angle;
+
+  public DriveCircle(DriveTrain drive, Gyro gyro, Boolean right, int angle) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
     m_gyro = gyro;
+    m_angle = angle;
+    if(right){
+      rightspd = .3;
+      leftspd = .7;
+    }
+    else{
+      rightspd = .7;
+      leftspd = .3;
+    }
+
     addRequirements(m_drive);
   }
 
@@ -24,22 +38,24 @@ public class DriveCircle extends CommandBase {
   @Override
   public void initialize() {
     initAngle = m_gyro.getAngle();
-    m_drive.tankDrive(.2, .5);
+    m_drive.tankDrive(rightspd, leftspd);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.tankDrive(.2, .5);
+    m_drive.tankDrive(rightspd, leftspd);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_drive.tankDrive(0, 0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_gyro.getAngle() - initAngle) > 340;
+    return Math.abs(m_gyro.getAngle() - initAngle) > m_angle;
   }
 }

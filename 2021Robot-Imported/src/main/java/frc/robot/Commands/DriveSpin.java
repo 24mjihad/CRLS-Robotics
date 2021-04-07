@@ -4,45 +4,54 @@
 
 package frc.robot.Commands;
 
-
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 
-public class DriveForward extends CommandBase {
-  /** Creates a new DriveForward. */
-  private DriveTrain m_drive;
-  private double  m_duration;
-  //private Encoder m_encoder;
-  public DriveForward(DriveTrain drive, double distance) {
+public class DriveSpin extends CommandBase {
+  /** Creates a new DriveSpin. */
+  private final DriveTrain m_drive;
+  private final Gyro m_gyro;
+  private int m_angle;
+  private double direction;
+  private double initAngle;
+
+  public DriveSpin(DriveTrain drive, Gyro gyro, Boolean right, int angle) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
-    m_duration = distance;
-    //m_encoder = encoder;
+    m_gyro = gyro;
+    m_angle = angle;
+    if(right){
+      direction = -.7;
+    }
+    else{
+      direction = .7;
+    }
     addRequirements(m_drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drive.resetEncoders();
-    m_drive.tankDrive(.65, .65);
+    initAngle = m_gyro.getAngle();
+    m_drive.arcadeDrive(0, direction);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.tankDrive(.65, .65);
+    m_drive.arcadeDrive(0, direction);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.tankDrive(0, 0);
+    m_drive.arcadeDrive(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_drive.avgPosition()) >= m_duration;
+    return Math.abs(m_gyro.getAngle() - initAngle) > m_angle;
   }
 }

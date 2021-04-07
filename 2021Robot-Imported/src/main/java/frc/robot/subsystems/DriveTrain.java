@@ -9,17 +9,21 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANEncoder;
 
+import java.lang.Math;
+
 //import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.command.Subsystem;
+
 import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+
 /**
  * Add your docs here.
  */
@@ -31,8 +35,9 @@ public class DriveTrain extends SubsystemBase {
   private final static CANSparkMax BR = new CANSparkMax(RobotMap.BR,MotorType.kBrushless);
   private final CANEncoder En_R = FR.getEncoder();
   private final CANEncoder En_L = FL.getEncoder();
-
-  private final double pcf = 1.7525; // 6 in * 3.14 * 10.75 gear ratio
+  private static Boolean drivemode = true;
+  //pcf translates rotations -> distance travelled
+  private final double pcf = 1.7525;//1.789214//1.7525; // 6 in * 3.14 * 10.75 gear ratio / 2
 
   static SpeedControllerGroup MR = new SpeedControllerGroup(BR, FR);
   static SpeedControllerGroup ML = new SpeedControllerGroup(BL, FL);
@@ -53,15 +58,35 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double avgPosition(){
-    return (En_L.getPosition() + En_R.getPosition())/2.0;
+    return (En_L.getPosition() + -1 * En_R.getPosition())/2.0;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("EncoderL", En_L.getPosition());
+    SmartDashboard.putNumber("EncoderR", -1 * En_R.getPosition());
   }
   
   public void tankDrive(double lspeed, double rspeed){
     m_drive.tankDrive(lspeed, rspeed);
+  }
+
+  public void arcadeDrive(double rspeed, double rotation){
+    m_drive.arcadeDrive(rspeed, rotation, true);
+  }
+
+  public void toggleDriveMode(){
+    drivemode = !drivemode;
+  }
+
+  public void Drive(double lspeed, double rspeed, double rotation){
+    if(drivemode){
+      tankDrive(Math.signum(lspeed) * lspeed * lspeed,
+                Math.signum(rspeed) * rspeed * rspeed);
+    }
+    else{
+      arcadeDrive(Math.signum(rspeed) * rspeed * rspeed, rotation);
+    }
   }
 }

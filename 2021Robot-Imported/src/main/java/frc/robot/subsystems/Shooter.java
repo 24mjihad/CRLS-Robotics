@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
@@ -20,7 +21,7 @@ public class Shooter extends SubsystemBase {
   private static final double shooterAngle = 65;
   private static final double shooterHeight = 0.475;
   private static final double shooterAngleRads = Math.toRadians(shooterAngle);
-
+  private static int distance = 3;
   public Shooter() {}
 
   public static double Calculate(double distance) {
@@ -41,7 +42,7 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   public void m_shoot(){
-    double shooterSpeed = Calculate(3);
+    double shooterSpeed = Calculate(distance);
     tShooter.set(shooterSpeed);
     bShooter.set(shooterSpeed);
   }
@@ -49,4 +50,13 @@ public class Shooter extends SubsystemBase {
     tShooter.set(0);
     bShooter.set(0);
   }
+  public void m_distup(){
+    distance = distance + 1;
+  }
+  public void m_distdown(){
+    if(distance>0){
+      distance = distance - 1;
+    }
+  }
+
 }
