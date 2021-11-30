@@ -36,6 +36,7 @@ public class DriveTrain extends SubsystemBase {
   private final CANEncoder En_R = FR.getEncoder();
   private final CANEncoder En_L = FL.getEncoder();
   private static Boolean drivemode = true;
+  private static Boolean reversed = false;
   //pcf translates rotations -> distance travelled
   private final double pcf = 1.7525;//1.789214//1.7525; // 6 in * 3.14 * 10.75 gear ratio / 2
 
@@ -80,7 +81,17 @@ public class DriveTrain extends SubsystemBase {
     drivemode = !drivemode;
   }
 
+  public void reverse(){
+    reversed = !reversed
+  }
+
   public void Drive(double lspeed, double rspeed, double rotation){
+    if (reversed){
+      lspeed *= -1;
+      rspeed *= -1;
+      rotation *= -1;
+    }
+    
     if(drivemode){
       // Double joystick control
       tankDrive(Math.signum(lspeed) * lspeed * lspeed,

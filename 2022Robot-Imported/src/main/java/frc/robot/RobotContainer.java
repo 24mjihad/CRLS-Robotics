@@ -91,12 +91,12 @@ public class RobotContainer {
         AutoR3Button .whenPressed(      new Auto_Race_Bounce(s_drivetrain, gyro));
         AutoS1Button .whenPressed(      new Auto_Search_A(s_drivetrain, gyro,s_gather));
         AutoS2Button .whenPressed(      new Auto_Search_B(s_drivetrain, gyro,s_gather));
-        reverseButton.whenPressed(      new InstantCommand(s_drivetrain::toggleDriveMode, s_drivetrain));
+        reverseButton.whenPressed(      new InstantCommand(s_drivetrain::reverse, s_drivetrain));
         EncoderButton.whenPressed(      new InstantCommand(s_drivetrain::resetEncoders, s_drivetrain));
         SortButton   .whenPressed(      new InstantCommand(s_index::toggleSort, s_index));
         WindupButton .whenPressed(      new InstantCommand(s_shooter::m_distup, s_shooter));
         WindownButton.whenPressed(      new InstantCommand(s_shooter::m_distdown, s_shooter));
-        //driveModeButton.whenPressed(    new InstantCommand(s_drivetrain::toggleDriveMode, s_drivetrain));
+        driveModeButton.whenPressed(    new InstantCommand(s_drivetrain::toggleDriveMode, s_drivetrain));
 
     }
 
