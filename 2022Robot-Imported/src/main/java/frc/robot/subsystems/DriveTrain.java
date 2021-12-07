@@ -84,6 +84,10 @@ public class DriveTrain extends SubsystemBase {
   public void reverse(){
     reversed = !reversed
   }
+  public void m_spin (){
+    tankDrive(.5,-.5)
+    )
+  }
 
   public void Drive(double lspeed, double rspeed, double rotation){
     if (reversed){

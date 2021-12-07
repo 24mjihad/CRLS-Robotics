@@ -76,8 +76,9 @@ public class RobotContainer {
         AutoS1Button    = new JoystickButton(joystick2, RobotMap.bc_Auto_Search1),
         AutoS2Button    = new JoystickButton(joystick2, RobotMap.bc_Auto_Search2),     
         EncoderButton   = new JoystickButton(joystick1, RobotMap.b_9P),
-        SortButton      = new JoystickButton(joystick1, RobotMap.b_10P),
+        m_spinButton      = new JoystickButton(joystick1, RobotMap.m_spin),
         driveModeButton = new JoystickButton(joystick1, RobotMap.b_driveMode)
+    
         ;
 
     //Add trigger conditionals
@@ -98,6 +99,7 @@ public class RobotContainer {
         WindownButton.whenPressed(      new InstantCommand(s_shooter::m_distdown, s_shooter));
         driveModeButton.whenPressed(    new InstantCommand(s_drivetrain::toggleDriveMode, s_drivetrain));
 
+        m_spinButton.whenPressed ( new InstantCommand(s_drivetrain::m_spin, s_drivetrain));
     }
 
     //Constructor

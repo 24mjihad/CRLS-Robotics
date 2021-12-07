@@ -52,7 +52,7 @@ public class RobotMap {
     public static final int b_ClimbDown = 8; //Lift Parascope
     public static final int b_driveMode = 12; //Swap arcade / drive mode
     public static final int b_9P = 9; //Drive to 3m (optimal shooting distance)
-    public static final int b_10P = 10;
+    public static final int m_spin = 10;
 
     public static final int bc_Auto1 = 1;
     public static final int bc_Auto_Race1 = 6;
@@ -60,4 +60,6 @@ public class RobotMap {
     public static final int bc_Auto_Race3 = 8;
     public static final int bc_Auto_Search1 = 9;
     public static final int bc_Auto_Search2 = 10;
+
+
 }
