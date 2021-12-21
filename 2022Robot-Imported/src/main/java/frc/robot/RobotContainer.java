@@ -76,7 +76,7 @@ public class RobotContainer {
         AutoS1Button    = new JoystickButton(joystick2, RobotMap.bc_Auto_Search1),
         AutoS2Button    = new JoystickButton(joystick2, RobotMap.bc_Auto_Search2),     
         EncoderButton   = new JoystickButton(joystick1, RobotMap.b_9P),
-        m_spinButton      = new JoystickButton(joystick1, RobotMap.m_spin),
+        m_spinButton    = new JoystickButton(joystick1, RobotMap.m_spin),
         driveModeButton = new JoystickButton(joystick1, RobotMap.b_driveMode)
     
         ;
@@ -98,8 +98,8 @@ public class RobotContainer {
         WindupButton .whenPressed(      new InstantCommand(s_shooter::m_distup, s_shooter));
         WindownButton.whenPressed(      new InstantCommand(s_shooter::m_distdown, s_shooter));
         driveModeButton.whenPressed(    new InstantCommand(s_drivetrain::toggleDriveMode, s_drivetrain));
-
-        m_spinButton.whenPressed ( new InstantCommand(s_drivetrain::m_spin, s_drivetrain));
+        m_spinButton.whenHeld( new InstantCommand(s_drivetrain::m_spin_start, s_drivetrain))
+                    .whenReleased( new InstantCommand(s_drivetrain::m_spin_stop, s_drivetrain));
     }
 
     //Constructor

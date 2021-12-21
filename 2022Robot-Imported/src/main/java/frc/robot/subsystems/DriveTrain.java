@@ -84,9 +84,18 @@ public class DriveTrain extends SubsystemBase {
   public void reverse(){
     reversed = !reversed
   }
-  public void m_spin (){
-    tankDrive(.5,-.5)
-    )
+  public void m_spin_start(){
+    FL.set(0.5);
+    BL.set(0.5);
+    FR.set(-0.5);
+    BR.set(-0.5);
+  }
+
+  public void m_spin_stop(){
+    FL.set(0);
+    BL.set(0);
+    FR.set(0);
+    BR.set(0);
   }
 
   public void Drive(double lspeed, double rspeed, double rotation){
